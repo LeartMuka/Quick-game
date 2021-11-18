@@ -9,7 +9,16 @@
     <style>
      canvas {
          background-color: black(0,0,0,0,8);
-     }   
+     }         
+ th, td {
+  border:1px solid black;
+}
+table {
+border-collapse: collapse;
+width: 400px;
+}
+
+       
     </style>
 
     <script>
@@ -19,6 +28,7 @@
         let canvas = document.getElementById('canvas');
         let ctx;
         let backgroundImage = new Image (); // wie geht´s 
+        let score = 0;
 
         let rocket = {
             x: 50,
@@ -83,22 +93,27 @@
         }
 
 
-
+function gameover() {
+    alert("Gameover");
+    score = 0;
+}
 
         function checkForColloin() {
             ufos.forEach(function(ufo) {
                 if(rocket.x + rocket.width >ufo.x
                 && rocket.y + rocket.height > ufo.y
-                && rocket.x < ufo.x
-                && rocket.y < ufo.y          
+                && rocket.x < ufo.x + ufo.width
+                && rocket.y < ufo.y + ufo.height         
                  ) {
                         ufo.hit = true;
                         ufo.img.src = 'boom.png';
                         console.log('Collion Rocket!!!');
+                        
+                        gameover();
 
-                        setTimeout(() => {
+                        
                             ufos = ufos.filter(u => u != ufo);
-                        }, 2000);
+                        //}, 2000);
                     }
                     bullets.forEach(function(bullet) {                  
                     if (bullet.x + bullet.width > ufo.x &&
@@ -106,9 +121,14 @@
                         bullet.x < ufo.x &&
                         bullet.y < ufo.y + ufo.height
                     ) {
+                        if(!ufo.hit){
+                            score++; 
+                        }
+                        
                         ufo.hit = true;
                         ufo.img.src = 'boom.png';
                         console.log('Collion Bullet!!!');
+                        
 
                         setTimeout(() => {
                             ufos = ufos.filter(u => u != ufo);
@@ -122,7 +142,7 @@
 
                 });
             });
-
+            document.getElementById('score').innerHTML = score;
         }
 
         function createUfos() {
@@ -177,7 +197,7 @@
                 
             });
             bullets.forEach(function(bullet) {
-                bullet.x += 5;
+                bullet.x += 25;
             });
         };
 
@@ -206,5 +226,16 @@
 
 <body onload= "startgame();">
     <canvas id="canvas" width="720" height="480"></canvas>
+    <div>Punkte:<span id="score">0</span></div>
+    <Table>
+        <tr>
+            <th>name</th>
+            <th>Punkte</th>
+        </tr>
+        <tr>
+            <td>Florian</td>
+            <td>5</td>
+        </tr>
+    </Table>
 </body>
 </html>  
